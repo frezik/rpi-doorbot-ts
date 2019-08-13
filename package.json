@@ -2,7 +2,8 @@
   "name": "@frezik/rpi-doorbot-ts",
   "version": "0.1.0",
   "description": "Modules to interface doorbot-ts to the Raspberry Pi",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "node_modules/.bin/tap --ts test/**/*.ts"
   },
@@ -23,8 +24,8 @@
   },
   "homepage": "https://github.com/frezik/rpi-doorbot-ts#readme",
   "dependencies": {
-    "@frezik/doorbot-ts": "^0.1.0",
-    "rpi": "0.0.3"
+    "@frezik/doorbot-ts": "^0.5.0",
+    "rpi-gpio": "2.1.3"
   },
   "devDependencies": {
     "tap": "^14.6.1"
