@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "node_modules/.bin/tap --ts test/**/*.ts"
+    "test": "node_modules/.bin/tap --ts test/sanity.ts"
   },
   "repository": {
     "type": "git",

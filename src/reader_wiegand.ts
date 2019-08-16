@@ -24,6 +24,8 @@ export class WiegandReader extends Doorbot.Reader
 
     init(): Promise<any>
     {
+        rpi.setMode( rpi.MODE_BCM );
+
         const promises = [
             rpi.promise.setup( this.d0_pin, rpi.DIR_IN, rpi.EDGE_BOTH )
             ,rpi.promise.setup( this.d1_pin, rpi.DIR_IN, rpi.EDGE_BOTH )
@@ -39,6 +41,12 @@ export class WiegandReader extends Doorbot.Reader
                     });
 
                     this.wiegand.on( 'reader', (id) => {
+                        // Need to pad ID to 10 digits with leading zeros
+                        let str_id = String( id );
+                        let id_len = str_id.length;
+                        let zero_pad_len = 10 - id_len;
+                        if( zero_pad_len < 0 ) zero_pad_len = 0;
+                        str_id = "0".repeat( zero_pad_len ) + str_id;
                         const data = new Doorbot.ReadData( id );
                         const auth_promise = this.auth.authenticate( data );
                         auth_promise.then( () => {
