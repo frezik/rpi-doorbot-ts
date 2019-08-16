@@ -5,6 +5,7 @@ import * as rpi from 'rpi-gpio';
 export class GPIOReader extends Doorbot.Reader
 {
     private pin;
+    private previous_read = 0;
 
 
     constructor( pin: number )
@@ -17,7 +18,13 @@ export class GPIOReader extends Doorbot.Reader
 
     init(): Promise<any>
     {
-        const promise = rpi.promise.setup( this.pin, rpi.DIR_IN );
+        rpi.setMode( rpi.MODE_BCM );
+
+        const promise = rpi.promise.setup(
+            this.pin
+            ,rpi.DIR_IN
+            ,rpi.EDGE_RISING
+        );
         return promise;
     }
 
@@ -26,17 +33,22 @@ export class GPIOReader extends Doorbot.Reader
         const promise = rpi.promise
             .read( this.pin )
             .then( (is_active) => {
-                if( is_active ) {
+                let return_promise;
+
+                if( is_active && (this.previous_read == 0) ) {
                     const data = new Doorbot.ReadData( "1" );
                     const auth_promise = this.auth.authenticate( data );
-                    return auth_promise;
+                    return_promise = auth_promise;
                 }
                 else {
                     // Not active, return dummy promise
-                    return new Promise( (resolve, reject) => {
+                    return_promise = new Promise( (resolve, reject) => {
                         resolve( false );
                     });
                 }
+
+                this.previous_read = is_active;
+                return return_promise;
             });
         return promise;
     }

@@ -2,27 +2,30 @@ import * as tap from 'tap';
 import * as Doorbot from '@frezik/doorbot-ts';
 import * as RPi from '../index';
 
+const PIN = 25;
+
 tap.plan( 2 );
 
 
 const always = new Doorbot.AlwaysAuthenticator();
 const act = new Doorbot.DoNothingActivator( () => {
     tap.pass( "Callback made" );
+    process.exit();
 });
 
-const gpio_reader = new RPi.GPIOReader( 25 );
+tap.comment( "Once first test has hit, connect pin " + PIN + " to a 5V pin" );
+
+const gpio_reader = new RPi.GPIOReader( PIN );
 tap.ok( gpio_reader instanceof Doorbot.Reader,
     "gpio reader is a Reader" );
 
 
-tap.skip( "Not on a Raspberry Pi", {}, () => {
-    gpio_reader.init().then( () => {
-        gpio_reader.setAuthenticator( always );
-        always.setActivator( act );
 
+gpio_reader.init().then( () => {
+    gpio_reader.setAuthenticator( always );
+    always.setActivator( act );
 
-        gpio_reader
-            .runOnce()
-            .then( (res) => {} );
-    });
+    gpio_reader
+        .run()
+        .then( (res) => {} );
 });

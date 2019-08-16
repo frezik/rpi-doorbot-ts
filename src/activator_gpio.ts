@@ -27,6 +27,8 @@ export class GPIOActivator
 
     init(): Promise<any>
     {
+        rpi.setMode( rpi.MODE_BCM );
+
         const promise = rpi.promise.setup( this.pin, rpi.DIR_OUT );
         return promise;
     }
