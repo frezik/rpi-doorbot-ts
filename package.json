@@ -25,6 +25,7 @@
   "homepage": "https://github.com/frezik/rpi-doorbot-ts#readme",
   "dependencies": {
     "@frezik/doorbot-ts": "^0.5.0",
+    "@types/node": "^12.7.2",
     "rpi-gpio": "2.1.3",
     "wiegand": "0.0.3"
   },

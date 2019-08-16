@@ -11,11 +11,12 @@ const act = new Doorbot.DoNothingActivator( () => {
 });
 
 const gpio_reader = new RPi.GPIOReader( 25 );
+tap.ok( gpio_reader instanceof Doorbot.Reader,
+    "gpio reader is a Reader" );
+
 
 tap.skip( "Not on a Raspberry Pi", {}, () => {
     gpio_reader.init().then( () => {
-        tap.ok( gpio_reader instanceof Doorbot.Reader,
-            "gpio reader is a Reader" );
         gpio_reader.setAuthenticator( always );
         always.setActivator( act );
 

@@ -6,16 +6,17 @@ tap.plan( 2 );
 
 
 const act = new RPi.GPIOActivator( 27, 1000 );
-
-tap.ok( act instanceof Doorbot.Activator,
-    "gpio activator is an Activator" );
+tap.ok( act, "Got an activator" );
 
 
 tap.skip( "Not on a Raspberry Pi", {}, () => {
     act
         .init()
-        .activate()
         .then( (res) => {
-            tap.pass( "GPIO activated" );
+            act
+                .activate()
+                .then( (res) => {
+                    tap.pass( "GPIO activated" );
+                });
         });
 });

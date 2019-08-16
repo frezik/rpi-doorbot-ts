@@ -25,6 +25,13 @@ export class GPIOActivator
     }
 
 
+    init(): Promise<any>
+    {
+        const promise = rpi.promise.setup( this.pin, rpi.DIR_OUT );
+        return promise;
+    }
+
+
     /**
      * Returns a Promise that, when resolved, activates the pin for the 
      * set period of time.
