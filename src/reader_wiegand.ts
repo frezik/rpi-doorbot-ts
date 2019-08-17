@@ -47,6 +47,8 @@ export class WiegandReader extends Doorbot.Reader
                         let zero_pad_len = 10 - id_len;
                         if( zero_pad_len < 0 ) zero_pad_len = 0;
                         str_id = "0".repeat( zero_pad_len ) + str_id;
+
+                        console.log( "[WIEGAND] Read string " + str_id );
                         const data = new Doorbot.ReadData( id );
                         const auth_promise = this.auth.authenticate( data );
                         auth_promise.then( () => {

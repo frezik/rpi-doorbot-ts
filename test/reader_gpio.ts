@@ -2,7 +2,7 @@ import * as tap from 'tap';
 import * as Doorbot from '@frezik/doorbot-ts';
 import * as RPi from '../index';
 
-const PIN = 25;
+const PIN = 27;
 
 tap.plan( 2 );
 
