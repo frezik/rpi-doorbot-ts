@@ -1,10 +1,12 @@
 import * as tap from 'tap';
 import * as Doorbot from '@frezik/doorbot-ts';
 import * as RPi from '../index';
+import * as os from 'os';
 
 const PIN_D0 = 17;
 const PIN_D1 = 18;
 
+Doorbot.init_logger( os.tmpdir() + "/doorbot_test.log"  )
 tap.plan( 2 );
 
 

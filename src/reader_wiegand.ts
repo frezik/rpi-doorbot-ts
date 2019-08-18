@@ -19,6 +19,7 @@ export class WiegandReader extends Doorbot.Reader
 
         this.d0_pin = d0_pin;
         this.d1_pin = d1_pin;
+        Doorbot.init_logger();
     }
 
 
@@ -26,6 +27,7 @@ export class WiegandReader extends Doorbot.Reader
     {
         rpi.setMode( rpi.MODE_BCM );
 
+        Doorbot.log.info( '<Rpi.WiegandReader> Setting up Wiegand reader' );
         const promises = [
             rpi.promise.setup( this.d0_pin, rpi.DIR_IN, rpi.EDGE_BOTH )
             ,rpi.promise.setup( this.d1_pin, rpi.DIR_IN, rpi.EDGE_BOTH )
@@ -48,7 +50,9 @@ export class WiegandReader extends Doorbot.Reader
                         if( zero_pad_len < 0 ) zero_pad_len = 0;
                         str_id = "0".repeat( zero_pad_len ) + str_id;
 
-                        console.log( "[WIEGAND] Read string " + str_id );
+                        Doorbot.log.info( '<Rpi.WiegandReader>'
+                            + ' Read Wiegand id: ' + str_id );
+
                         const data = new Doorbot.ReadData( id );
                         const auth_promise = this.auth.authenticate( data );
                         auth_promise.then( () => {
