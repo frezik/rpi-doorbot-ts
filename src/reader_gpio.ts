@@ -13,6 +13,7 @@ export class GPIOReader extends Doorbot.Reader
         super();
 
         this.pin = pin;
+        Doorbot.init_logger();
     }
 
 
@@ -20,6 +21,7 @@ export class GPIOReader extends Doorbot.Reader
     {
         rpi.setMode( rpi.MODE_BCM );
 
+        Doorbot.log.info( '<Rpi.GPIOReader> Setting up on pin ' + this.pin );
         const promise = rpi.promise.setup(
             this.pin
             ,rpi.DIR_IN
@@ -36,6 +38,8 @@ export class GPIOReader extends Doorbot.Reader
                 let return_promise;
 
                 if( is_active && (this.previous_read == 0) ) {
+                    Doorbot.log.info( '<Rpi.GPIOReader> Pin ' + this.pin 
+                        + ' is now active' );
                     const data = new Doorbot.ReadData( "1" );
                     const auth_promise = this.auth.authenticate( data );
                     return_promise = auth_promise;
