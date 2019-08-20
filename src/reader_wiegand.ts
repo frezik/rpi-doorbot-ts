@@ -53,7 +53,7 @@ export class WiegandReader extends Doorbot.Reader
                         Doorbot.log.info( '<Rpi.WiegandReader>'
                             + ' Read Wiegand id: ' + str_id );
 
-                        const data = new Doorbot.ReadData( id );
+                        const data = new Doorbot.ReadData( str_id );
                         const auth_promise = this.auth.authenticate( data );
                         auth_promise.then( () => {
                             resolve();
