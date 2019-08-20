@@ -1,6 +1,6 @@
 {
   "name": "@frezik/rpi-doorbot-ts",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Modules to interface doorbot-ts to the Raspberry Pi",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -33,7 +33,11 @@ export class GPIOActivator
         rpi.setMode( rpi.MODE_BCM );
 
         Doorbot.log.info( '<Rpi.GPIOActivator> Setting up on pin ' + this.pin );
-        const promise = rpi.promise.setup( this.pin, rpi.DIR_OUT );
+        const promise = rpi.promise
+            .setup( this.pin, rpi.DIR_OUT )
+            .then( () => {
+                return rpi.write( this.pin, false );
+            });
         return promise;
     }
 
