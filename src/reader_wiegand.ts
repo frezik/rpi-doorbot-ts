@@ -69,7 +69,9 @@ export class WiegandReader extends Doorbot.Reader
     {
         // Ignore, Wiegand comes through events
         const promise = new Promise( (resolve, reject) => {
-            resolve();
+            setTimeout( () => {
+                resolve( true );
+            }, 1000 );
         });
         return promise;
     }
