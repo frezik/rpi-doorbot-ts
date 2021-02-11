@@ -1,7 +1,6 @@
 # RPi Doorbot.ts
 
-Interfaces Doorbot.ts to the Raspberry Pi. This allows you to read entries from 
-a keyboard or a Wiegand reader, and to activate things over GPIO.
+Interfaces Doorbot.ts to the Raspberry Pi.
 
 # Setup
 
@@ -14,6 +13,9 @@ Here's an example of reading entries from a Wiegand reader, using pins 12
 and 13 as data 0 and 1, respectively.  This uses an `AlwaysAuthenticator`, so 
 all reads will pass through. Once it does, GPIO pin 22 will be turned on for 
 30 seconds.
+
+(This uses an external program to read the Wiegand data. You can get that at:
+https://github.com/frezik/wiegand_pigpio)
 
 ```
 import * as Doorbot from '@frezik/doorbot-ts';
@@ -28,8 +30,27 @@ const OPEN_TIME_MS = 30000;
 
 Doorbot.init_logger( "/home/pi/doorbot/doorbot.log"  )
 
+// Launch wiegand reader program as its own process. Run its STDOUT into
+// an fs reader.
 
-const reader = new RPi.WiegandReader( DATA0, DATA1 );
+const wiegand = Process.spawn( WIEGAND_PROGRAM, [
+    DATA0.toString()
+    ,DATA1.toString()
+]);
+wiegand.on( 'error', (err) => {
+    Doorbot.log.error( '<Main> Error starting Wiegand reader: ' + err );
+    process.exit(1);
+});
+wiegand.on( 'exit', (code, signal) => {
+    Doorbot.log.error( '<Main> Wiegand reader exited with code ' + code );
+    process.exit(1);
+});
+wiegand.stderr.on( 'data', (data) => {
+    Doorbot.log.info( '<Main> Wiegand reader stderr: ' + data );
+});
+
+
+const reader = new Doorbot.FHReader( wiegand.stdout );
 const auth = new Doorbot.AlwaysAuthenticator();
 const act = new RPi.GPIOActivator( PIN, OPEN_TIME_MS );
 
